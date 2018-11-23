@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg.anywork.dao.TestDao">
+
+    <resultMap type="com.qg.anywork.model.po.StudentAnswerAnalysis" id="studentAnswerAnalysis">
+        <id property="studentAnswerId" column="student_answer_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="studentAnswer" column="student_answer"/>
+        <result property="isTrue" column="is_true"/>
+        <result property="socre" column="getsocre"/>
+
+        <association property="question" javaType="com.qg.anywork.model.po.Question">
+            <id property="questionId" column="question_id"/>
+            <result property="content" column="content"/>
+            <result property="type" column="type"/>
+            <result property="A" column="A"/>
+            <result property="B" column="B"/>
+            <result property="C" column="C"/>
+            <result property="D" column="D"/>
+            <result property="key" column="key"/>
+            <result property="socre" column="socre"/>
+            <result property="testpaperId" column="testpaper_id"/>
+            <result property="other" column="other"/>
+            <result property="analysis" column="analysis"/>
+        </association>
+    </resultMap>
+
+    <resultMap type="com.qg.anywork.model.po.CheckResult" id="checkResult">
+        <result property="studentId" column="student_id"/>
+        <result property="studentName" column="user_name"/>
+        <result property="ifCheck" column="if_check"/>
+        <result property="object" column="object"/>
+        <result property="subject" column="subject"/>
+        <result property="studentNum" column="student_num"/>
+
+        <association property="testpaper" javaType="com.qg.anywork.model.po.TestPaper">
+            <id property="testpaperId" column="testpaper_id"/>
+            <result property="testpaperTitle" column="testpaper_title"/>
+            <result property="createTime" column="create_time"/>
+            <result property="endingTime" column="ending_time"/>
+            <result property="testpaperScore" column="testpaper_score"/>
+        </association>
+    </resultMap>
+
+    <select id="isSubmit" resultType="int">
+        SELECT count(*)
+        FROM test_result
+        WHERE test_paper_id = #{testPaperId}
+          AND student_id = #{userId};
+    </select>
+
+    <select id="getTestPaperByTestpaperId" resultType="com.qg.anywork.model.po.TestPaper">
+        SELECT *
+        FROM test_paper
+        WHERE testpaper_id = #{testpaperId};
+    </select>
+
+    <select id="getQuestionByTestpaperId" resultType="com.qg.anywork.model.po.Question">
+        SELECT *
+        FROM question
+        WHERE testpaper_id = #{testPaperId}
+    </select>
+
+    <select id="getQuestionById" resultType="com.qg.anywork.model.po.Question">
+        SELECT *
+        FROM question
+        WHERE question_id = #{questionId}
+    </select>
+
+    <insert id="addTestResult" parameterType="com.qg.anywork.model.po.StudentTestResult"
+            keyProperty="studentTestResultId">
+        INSERT ignore INTO test_result (student_id, test_paper_id, socre)
+        VALUE (#{testResult.studentId}, #{testResult.testpaperId}, #{testResult.socre})
+    </insert>
+
+    <update id="updateTestResult" parameterType="com.qg.anywork.model.po.StudentTestResult">
+        UPDATE test_result
+        <set>
+            <if test="testResult.socre != null">
+                socre = #{testResult.socre},
+            </if>
+        </set>
+        WHERE student_id = #{testResult.studentId} AND test_paper_id = #{testResult.testpaperId}
+    </update>
+
+    <insert id="addStudentAnswer" parameterType="com.qg.anywork.model.po.StudentAnswerAnalysis"
+            keyProperty="studentAnswerAnalysisId">
+        INSERT ignore INTO student_answer (student_id, question_id, student_answer, is_true, socre)
+        VALUE (#{studentAnswerAnalysis.studentId},
+               #{studentAnswerAnalysis.question.questionId},
+               #{studentAnswerAnalysis.studentAnswer},
+               #{studentAnswerAnalysis.isTrue},
+               #{studentAnswerAnalysis.socre})
+    </insert>
+
+    <select id="getTestResult" resultType="com.qg.anywork.model.po.StudentTestResult">
+        SELECT *
+        FROM test_result
+        WHERE test_paper_id = #{testPaperId}
+          AND student_id = #{userId}
+    </select>
+
+    <select id="getStudentAnswer" resultMap="studentAnswerAnalysis">
+        SELECT s.student_id, s.student_answer, s.is_true, s.socre as getsocre, q.*
+        FROM student_answer s
+                 right join question q on s.question_id = q.question_id
+        WHERE s.student_id = #{userId}
+          AND s.question_id in (SELECT q.question_id FROM question WHERE q.testpaper_id = #{testPaperId})
+    </select>
+
+    <insert id="addCheckResult" parameterType="com.qg.anywork.model.po.CheckResult">
+        INSERT into check_result (if_check, object, subject, testpaper_id, student_id)
+        VALUES (#{checkResult.ifCheck},
+                #{checkResult.object},
+                #{checkResult.subject},
+                #{checkResult.testpaper.testpaperId},
+                #{checkResult.studentId})
+    </insert>
+
+    <select id="getCheckResultByTestpaperId" resultMap="checkResult">
+        SELECT c.student_id,
+               u.user_name,
+               u.student_id as student_num,
+               c.if_check,
+               c.object,
+               c.subject,
+               t.testpaper_id,
+               t.testpaper_title,
+               t.create_time,
+               t.ending_time,
+               t.testpaper_score
+        FROM check_result c
+                 left join test_paper t on t.testpaper_id = c.testpaper_id
+                 left join user u on c.student_id = u.user_id,
+             test_paper_organization tso
+        WHERE c.testpaper_id = #{testpaperId}
+          AND tso.organization_id = #{organizationId}
+          and t.testpaper_id = tso.test_paper_id
+    </select>
+    <update id="updateStudentAnswerSocre">
+        UPDATE student_answer
+        SET socre = #{socre}
+        WHERE student_id = #{studentId}
+          AND question_id = #{questionId}
+    </update>
+
+    <update id="updateCheckResult">
+        UPDATE check_result
+        SET subject  = #{subject},
+            if_check = 1
+        WHERE student_id = #{studentId}
+          AND testpaper_id = #{testPaperId}
+    </update>
+
+    <select id="findByOrganizationIdAndChapterIdAndTestPaperType"
+            resultType="com.qg.anywork.model.po.TestPaper">
+        SELECT ts.*
+        from test_paper ts
+                 left join test_paper_organization tso on ts.testpaper_id = tso.test_paper_id
+        where tso.organization_id = #{organizationId}
+          and chapter_id = #{chapterId}
+          and testpaper_type = #{testPaperType}
+        order by create_time
+    </select>
+
+    <select id="findTestResultByTestPaperIdAndUserIdAndOrganizationId"
+            resultType="com.qg.anywork.model.po.StudentTestResult">
+        SELECT *
+        FROM test_result
+        WHERE test_paper_id = #{testPaperId}
+          AND student_id = #{userId}
+    </select>
+
+    <select id="countQuestion" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        from question
+        where testpaper_id = #{testPaperId}
+    </select>
+
+    <select id="getStudentAnswerAnalysis" resultMap="studentAnswerAnalysis">
+        SELECT s.student_id, s.student_answer, s.is_true, s.socre as getsocre, q.*
+        FROM student_answer s
+                 right join question q on s.question_id = q.question_id
+        WHERE s.student_id = #{userId}
+          AND s.question_id = #{questionId}
+    </select>
+    <select id="findStudentTestResultByUserIdAndTestPaperIds"
+            resultType="com.qg.anywork.model.po.StudentTestResult">
+        select * from test_result where student_id = #{userId} and
+        test_paper_id in
+        <foreach collection="testPaperIds" item="testPaperId" index="index" separator="," open="(" close=")">
+            #{testPaperId}
+        </foreach>
+    </select>
+    <select id="getStudentSubjectAnswer" resultMap="studentAnswerAnalysis">
+        SELECT s.student_id, s.student_answer, s.is_true, s.socre as getsocre, q.*
+        FROM student_answer s
+                 right join question q on s.question_id = q.question_id
+        WHERE s.student_id = #{userId}
+          AND s.question_id in (SELECT q.question_id FROM question WHERE q.testpaper_id = #{testPaperId}
+                                                                     and q.type = 4)
+    </select>
+
+</mapper>

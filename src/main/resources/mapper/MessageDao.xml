@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg.anywork.dao.MessageDao">
+    <insert id="insertMessage" parameterType="com.qg.anywork.model.po.Message" useGeneratedKeys="true"
+            keyProperty="message.messageId">
+        INSERT INTO message (user_id, title, content, create_time)
+        value (#{message.userId}, #{message.title}, #{message.content}, #{message.createTime})
+    </insert>
+
+    <insert id="insertMessageAndOrganization">
+        INSERT INTO organization_message (organization_id, message_id) VALUES
+        <foreach collection="organizationIds" item="organizationId" index="index" separator=",">
+            (#{organizationId}, #{messageId})
+        </foreach>
+    </insert>
+
+    <insert id="insertUserMessage">
+        INSERT INTO user_message (user_id, message_id) VALUES
+        <foreach collection="userIds" item="userId" index="index" separator=",">
+            (#{userId}, #{messageId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteMessageById">
+        DELETE
+        from message
+        where message_id = #{messageId}
+    </delete>
+
+    <delete id="deleteMessageByUserIdAndMessageId">
+        DELETE
+        from user_message
+        where message_id = #{messageId}
+          and user_id = #{userId}
+    </delete>
+    <delete id="deleteMessageUserByMessageId">
+        delete
+        from user_message
+        where message_id = #{messageId}
+    </delete>
+
+    <delete id="deleteMessageOrganizationByMessageId">
+        delete
+        from organization_message
+        where message_id = #{messageId}
+    </delete>
+
+    <select id="findMessageByUserId" resultType="com.qg.anywork.model.po.Message">
+        SELECT message_id, m.user_id, title, content, create_time, u.user_name as publisher
+        from message m
+                 left join user u on m.user_id = u.user_id
+        where m.user_id = #{userId}
+        order by create_time desc
+    </select>
+
+    <select id="findByUserIdAndMessageId" resultType="com.qg.anywork.model.po.Message">
+        SELECT message_id, m.user_id, title, content, create_time, u.user_name as publisher
+        from message m
+                 left join user u on m.user_id = u.user_id
+        where m.user_id = #{userId}
+          and message_id = #{messageId}
+        order by create_time desc
+    </select>
+
+    <select id="findHaveReadMessageExceptMessageIds" resultType="com.qg.anywork.model.po.Message">
+        select m.*, u.user_name as publisher
+        from message m
+                 left join user u on m.user_id = u.user_id
+                 left join organization_message om on om.message_id = m.message_id
+        where organization_id = #{organizationId}
+          and m.message_id not in (SELECT message_id from user_message where user_id = #{userId})
+        order by create_time desc
+    </select>
+
+    <select id="findUnreadMessage" resultType="com.qg.anywork.model.po.Message">
+        select m.*, u.user_name as publisher
+        from message m
+                 left join user u on m.user_id = u.user_id
+        where m.message_id in (SELECT message_id from user_message where user_id = #{userId})
+        order by create_time desc
+    </select>
+
+    <select id="findByMessageId" resultType="com.qg.anywork.model.po.Message">
+        SELECT message_id, m.user_id, title, content, create_time, u.user_name as publisher
+        from message m
+                 left join user u on m.user_id = u.user_id
+        where message_id = #{messageId}
+        order by create_time desc
+    </select>
+
+    <select id="findAllMessagesByOrganizationId" resultType="com.qg.anywork.model.po.Message">
+        select m.*, u.user_name as publisher
+        from message m
+                 left join organization_message om on om.message_id = m.message_id
+                 left join user u on m.user_id = u.user_id
+        where organization_id = #{organizationId}
+        order by create_time desc
+    </select>
+
+    <select id="findMessageIdsByStudentId" resultType="java.lang.Integer">
+        SELECT message_id
+        from user_message
+        where user_id = #{userId}
+    </select>
+</mapper>

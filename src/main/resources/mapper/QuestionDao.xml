@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg.anywork.dao.QuestionDao">
+    <!--目的：为Dao接口方法提供SQL语句-->
+
+    <insert id="insertQuestion" parameterType="com.qg.anywork.model.po.Question" useGeneratedKeys="true"
+            keyProperty="question.questionId">
+        INSERT INTO question (content, type, A, B, C, D, `key`, socre, testpaper_id, other, analysis)
+        VALUES (#{question.content},
+                #{question.type},
+                #{question.A},
+                #{question.B},
+                #{question.C},
+                #{question.D},
+                #{question.key},
+                #{question.socre},
+                #{question.testpaperId},
+                #{question.other},
+                #{question.analysis})
+    </insert>
+
+    <insert id="insertAllQuestion" useGeneratedKeys="true" keyProperty="questionId" parameterType="java.util.ArrayList">
+        INSERT INTO
+        question(type, A, B, C, D, `key`, socre, testpaper_id, other, analysis, content)
+        VALUES
+        <foreach collection="questionList" item="question" index="index" separator=",">
+            (#{question.type}, #{question.A}, #{question.B}, #{question.C}, #{question.D},
+            #{question.key}, #{question.socre}, #{question.testpaperId}, #{question.other}, #{question.analysis},
+            #{question.content})
+        </foreach>
+    </insert>
+
+    <insert id="collectQuestion" parameterType="com.qg.anywork.model.po.CollectionQuestion"
+            useGeneratedKeys="true" keyProperty="collectionQuestion.collectionQuestionId">
+        INSERT INTO collection_question (question_id, student_id, collection_time)
+        VALUES (#{collectionQuestion.questionId}, #{collectionQuestion.studentId}, #{collectionQuestion.collectionTime})
+    </insert>
+
+    <delete id="deleteQuestion">
+        DELETE
+        FROM question
+        WHERE testpaper_id = #{testPaperId}
+    </delete>
+    <delete id="deleteCollection">
+        DELETE
+        from collection_question
+        where student_id = #{studentId}
+          and question_id = #{questionId}
+    </delete>
+    <select id="findContentById" resultType="java.lang.String">
+        SELECT content
+        from question
+        where question_id = #{questionId}
+    </select>
+    <select id="findQuestionListByStudentId" resultType="java.lang.Integer">
+        SELECT question_id
+        from collection_question
+        where student_id = #{studentId}
+        order by collection_time
+    </select>
+    <select id="checkQuestionIfCollected" resultType="java.lang.Integer">
+        select count(*)
+        from collection_question
+        where student_id = #{studentId}
+          and question_id = #{questionId}
+    </select>
+    <select id="findCollectedQuestion" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        from collection_question
+        where student_id = #{userId}
+          and question_id = #{questionId}
+    </select>
+</mapper>

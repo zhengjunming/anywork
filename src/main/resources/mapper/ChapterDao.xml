@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg.anywork.dao.ChapterDao">
+    <!--目的：为Dao接口方法提供SQL语句-->
+
+    <select id="getByOrganizationId" resultType="com.qg.anywork.model.po.Chapter">
+        SELECT *
+        FROM chapter
+        WHERE organization_id = #{organizationId}
+    </select>
+    <select id="getOrganizationIdByChapterId" resultType="java.lang.Integer">
+        select organization_id
+        from chapter
+        where chapter_id = #{chapterId}
+    </select>
+    <select id="getByUserId" resultType="com.qg.anywork.model.po.Chapter">
+        SELECT *
+        FROM chapter
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="addChapter" parameterType="com.qg.anywork.model.po.Chapter" useGeneratedKeys="true"
+            keyProperty="chapter.chapterId">
+        INSERT ignore INTO chapter (user_id, chapter_name)
+        VALUE (#{chapter.userId}, #{chapter.chapterName})
+    </insert>
+
+    <delete id="deleteChapter" parameterType="int">
+        DELETE
+        FROM chapter
+        WHERE chapter_id = #{chapterId}
+    </delete>
+
+    <update id="updateChapter" parameterType="com.qg.anywork.model.po.Chapter">
+        UPDATE chapter
+        SET chapter_name = #{chapter.chapterName}
+        WHERE chapter_id = #{chapter.chapterId}
+    </update>
+
+</mapper>

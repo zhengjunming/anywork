@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qg.anywork.dao.PaperDao">
+
+    <insert id="insertTestPaper" parameterType="com.qg.anywork.model.po.TestPaper" useGeneratedKeys="true"
+            keyProperty="testPaper.testpaperId">
+        INSERT INTO test_paper (testpaper_title,
+                                author_id,
+                                create_time,
+                                ending_time,
+                                testpaper_type,
+                                chapter_id,
+                                have_subject)
+        VALUES (#{testPaper.testpaperTitle},
+                #{testPaper.authorId},
+                #{testPaper.createTime},
+                #{testPaper.endingTime},
+                #{testPaper.testpaperType},
+                #{testPaper.chapterId},
+                #{testPaper.haveSubject})
+    </insert>
+
+    <insert id="insertTestPaperOrganization">
+        insert into test_paper_organization (test_paper_id, organization_id)
+        values
+        <foreach collection="organizationIds" index="index" separator="," item="organizationId">
+            (#{testPaperId}, #{organizationId})
+        </foreach>
+    </insert>
+    <update id="updateTestPaperScore">
+        UPDATE test_paper
+        set testpaper_score = #{score}
+        where testpaper_id = #{testPaperId}
+    </update>
+    <update id="updateTestPaperInfo">
+        update test_paper
+        <set>
+            <if test="testPaper.testpaperTitle != null">
+                testpaper_title = #{testPaper.testpaperTitle},
+            </if>
+            <if test="testPaper.testpaperType != null">
+                testpaper_type = #{testPaper.testpaperType},
+            </if>
+            <if test="testPaper.createTime != null">
+                create_time = #{testPaper.createTime},
+            </if>
+            <if test="testPaper.endingTime != null">
+                ending_time = #{testPaper.endingTime}
+            </if>
+        </set>
+        where testpaper_id = #{testPaper.testpaperId}
+    </update>
+    <delete id="deleteTestPaperOrganizationRelation">
+        DELETE
+        from test_paper_organization
+        where test_paper_id = #{testPaperId}
+    </delete>
+    <delete id="deleteTestPaper">
+        DELETE
+        from test_paper
+        where testpaper_id = #{testPaperId}
+    </delete>
+
+    <resultMap id="testPaperMap" type="com.qg.anywork.model.po.TestPaper">
+        <id property="testpaperId" column="testpaper_id"/>
+        <result property="testpaperTitle" column="testpaper_title"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endingTime" column="ending_time"/>
+        <result property="testpaperScore" column="testpaper_score"/>
+        <result property="testpaperType" column="testpaper_type"/>
+
+        <collection property="questions" ofType="com.qg.anywork.model.po.Question">
+            <id property="questionId" column="question_id"/>
+            <result property="content" column="content"/>
+            <result property="type" column="type"/>
+            <result property="A" column="A"/>
+            <result property="B" column="B"/>
+            <result property="C" column="C"/>
+            <result property="D" column="D"/>
+            <result property="key" column="key"/>
+            <result property="socre" column="socre"/>
+            <result property="testpaperId" column="question_testpaper_id"/>
+            <result property="other" column="other"/>
+            <result property="analysis" column="analysis"/>
+        </collection>
+    </resultMap>
+
+    <select id="findByTestPaperId" resultMap="testPaperMap">
+        select t.testpaper_id,
+               t.testpaper_title,
+               t.create_time,
+               t.ending_time,
+               t.testpaper_score,
+               t.testpaper_type,
+               q.question_id,
+               q.content,
+               q.type,
+               q.A,
+               q.B,
+               q.C,
+               q.D,
+               q.key,
+               q.analysis,
+               q.socre,
+               q.testpaper_id as question_testpaper_id,
+               q.other
+        from test_paper t
+                 left join question q on q.testpaper_id = t.testpaper_id
+        where t.testpaper_id = #{testPaperId}
+    </select>
+    <select id="listTestPaperByOrganizationId" resultType="com.qg.anywork.model.po.TestPaper">
+        SELECT t.*
+        from test_paper_organization tpo
+                 left join test_paper t on t.testpaper_id = tpo.test_paper_id
+        where tpo.organization_id = #{organizationId}
+        order by t.create_time
+    </select>
+    <select id="findTestPaperMainInfoById" resultType="com.qg.anywork.model.po.TestPaper">
+        SELECT *
+        from test_paper
+        where testpaper_id = #{testPaperId}
+    </select>
+
+    <select id="findTestPaperByOrganizationIdAndTime" resultType="com.qg.anywork.model.po.TestPaper">
+        select t.*
+        from test_paper t
+                 left join test_paper_organization tpo on tpo.test_paper_id = t.testpaper_id
+        where tpo.organization_id = #{organizationId}
+          and create_time &lt; #{createTime}
+    </select>
+    <select id="getAverageScore" resultType="java.lang.Double">
+        SELECT IFNULL(AVG(socre), 0.0)
+        from test_result where test_paper_id = #{testPaperId} and
+        student_id in
+        <foreach collection="userIds" item="userId" separator="," index="index" close=")" open="(">
+            #{userId}
+        </foreach>
+    </select>
+    <select id="getQuestionCorrectNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        from student_answer where question_id = #{questionId}
+        and is_true = 1 and student_id in
+        <foreach collection="userIds" item="userId" separator="," index="index" close=")" open="(">
+            #{userId}
+        </foreach>
+    </select>
+    <select id="findTestPaperIdsByUserId" resultType="java.lang.Integer">
+        SELECT testpaper_id
+        from test_paper
+        where author_id = #{userId}
+    </select>
+</mapper>
