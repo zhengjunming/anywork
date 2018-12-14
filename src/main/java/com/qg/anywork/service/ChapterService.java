@@ -6,8 +6,7 @@ import com.qg.anywork.model.po.Chapter;
 import java.util.List;
 
 /**
- * @author logan
- * @date 2017/7/11
+ * @author ming
  */
 public interface ChapterService {
 

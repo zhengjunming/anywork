@@ -11,8 +11,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * @author logan
- * @date 2017/7/11
+ * @author ming
  */
 @Data
 @NoArgsConstructor

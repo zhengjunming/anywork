@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * @author FunriLy
- * @date 2017/7/13
- * From small beginnings comes great things.
+ * @author ming
  */
 @Controller
 @RequestMapping("/quest")

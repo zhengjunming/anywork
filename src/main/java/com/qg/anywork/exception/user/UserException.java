@@ -4,9 +4,7 @@ import com.qg.anywork.enums.StatEnum;
 import com.qg.anywork.exception.AbstractAnyWorkException;
 
 /**
- * @author FunriLy
- * @date 2017/7/14
- * From small beginnings comes great things.
+ * @author ming
  */
 public class UserException extends AbstractAnyWorkException {
 

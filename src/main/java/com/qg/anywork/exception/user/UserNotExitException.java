@@ -3,8 +3,7 @@ package com.qg.anywork.exception.user;
 import com.qg.anywork.enums.StatEnum;
 
 /**
- * Created by FunriLy on 2017/7/10.
- * From small beginnings comes great things.
+ * @author ming
  */
 public class UserNotExitException extends UserException {
 

@@ -25,9 +25,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * @author FunriLy
- * @date 2017/6/29
- * From small beginnings comes great things.
+ * @author ming
  */
 @Configuration
 @EnableCaching

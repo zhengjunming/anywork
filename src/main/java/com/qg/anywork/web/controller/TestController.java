@@ -22,8 +22,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
- * @author logan
- * @date 2017/7/12
+ * @author ming
  */
 @RestController
 @RequestMapping("/test")

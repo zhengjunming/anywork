@@ -4,8 +4,7 @@ import com.qg.anywork.enums.StatEnum;
 import com.qg.anywork.exception.AbstractAnyWorkException;
 
 /**
- * @author logan
- * @date 2017/7/11
+ * @author ming
  */
 public class OrganizationException extends AbstractAnyWorkException {
 

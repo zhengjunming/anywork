@@ -4,7 +4,7 @@ import com.qg.anywork.enums.StatEnum;
 import com.qg.anywork.exception.AbstractAnyWorkException;
 
 /**
- * Created by logan on 2017/7/11.
+ * @author ming
  */
 public class ChapterException extends AbstractAnyWorkException {
 

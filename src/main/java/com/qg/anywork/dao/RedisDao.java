@@ -10,11 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Redis 数据库缓存操作
- *
- * @author FunriLy
- * @date 2017/7/12
- * From small beginnings comes great things.
+ * @author ming
  */
 @Repository
 public class RedisDao {
@@ -39,7 +35,6 @@ public class RedisDao {
     public void removeQuestionList(int userId) {
         String userStr = String.valueOf(userId);
         while (redisTemplate.opsForList().size(userStr) > 0) {
-            // TODO: 2017/7/13 清除不彻底
             redisTemplate.opsForList().rightPop(userStr);
         }
     }

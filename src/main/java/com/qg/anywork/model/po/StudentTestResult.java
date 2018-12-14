@@ -7,11 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 学生成绩实体
- *
- * @author FunriLy
- * @date 2017/7/10
- * From small beginnings comes great things.
+ * @author ming
  */
 @Data
 @NoArgsConstructor

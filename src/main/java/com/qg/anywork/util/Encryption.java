@@ -3,8 +3,7 @@ package com.qg.anywork.util;
 import org.springframework.util.DigestUtils;
 
 /**
- * Created by FunriLy on 2017/7/10.
- * From small beginnings comes great things.
+ * @author ming
  */
 public class Encryption {
 

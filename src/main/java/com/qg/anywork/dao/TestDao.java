@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author logan
- * @date 2017/7/11
- * 操作学生的答卷
+ * @author ming
  */
 @Mapper
 @Repository

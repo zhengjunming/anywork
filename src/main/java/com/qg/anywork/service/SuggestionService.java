@@ -5,8 +5,7 @@ import com.qg.anywork.model.po.Suggestion;
 
 
 /**
- * @author logan
- * @date 2017/8/18
+ * @author ming
  */
 public interface SuggestionService {
     /**

@@ -20,10 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 组织模块
- *
- * @author logan
- * @date 2017/7/11
+ * @author ming
  */
 @RestController
 @RequestMapping("/organization")

@@ -8,11 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 试卷实体
- *
- * @author FunriLy
- * @date 2017/7/10
- * From small beginnings comes great things.
+ * @author ming
  */
 @Data
 @NoArgsConstructor

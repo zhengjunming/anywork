@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author FunriLy
- * @date 2017/7/10
- * From small beginnings comes great things.
+ * @author ming
  */
 @Mapper
 @Repository

@@ -9,11 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 系统通知实体操作接口
- *
- * @author FunriLy
- * @date 2017/9/25
- * From small beginnings comes great things.
+ * @author ming
  */
 @Mapper
 @Repository

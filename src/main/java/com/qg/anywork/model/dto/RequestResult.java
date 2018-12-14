@@ -4,9 +4,7 @@ import com.qg.anywork.enums.StatEnum;
 import lombok.Data;
 
 /**
- * @author FunriLy
- * @date 2017/7/10
- * From small beginnings comes great things.
+ * @author ming
  */
 @Data
 public class RequestResult<T> {

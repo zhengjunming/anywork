@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author logan
- * @date 2017/7/11
- * 对于章节的数据库操作
+ * @author ming
  */
 @Mapper
 @Repository

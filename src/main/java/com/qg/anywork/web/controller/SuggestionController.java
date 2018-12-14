@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- * @author logan
- * @date 2017/8/18
+ * @author ming
  */
 @RestController
 @RequestMapping("/suggest")

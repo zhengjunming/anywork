@@ -23,11 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 操作Excel表格的工具类
- *
- * @author FunriLy
- * @date 2017/7/12
- * From small beginnings comes great things.
+ * @author ming
  */
 public class ExcelUtil {
 

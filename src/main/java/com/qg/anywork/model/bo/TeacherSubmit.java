@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author logan
- * @date 2017/8/1
+ * @author ming
  */
 @Data
 @NoArgsConstructor

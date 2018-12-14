@@ -3,9 +3,7 @@ package com.qg.anywork.service;
 import com.qg.anywork.model.dto.RequestResult;
 
 /**
- * @author FunriLy
- * @date 2017/7/13
- * From small beginnings comes great things.
+ * @author ming
  */
 public interface QuestionService {
 

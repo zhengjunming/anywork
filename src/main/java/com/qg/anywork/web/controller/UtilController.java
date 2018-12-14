@@ -20,11 +20,7 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- * 工具类访问接口
- *
- * @author FunriLy
- * @date 2017/8/18
- * From small beginnings comes great things.
+ * @author ming
  */
 @Controller
 @RequestMapping("/utils")

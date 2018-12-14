@@ -7,8 +7,7 @@ import com.qg.anywork.model.po.StudentTestResult;
 import java.text.ParseException;
 
 /**
- * @author logan
- * @date 2017/7/10
+ * @author ming
  */
 public interface TestService {
 

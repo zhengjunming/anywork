@@ -6,11 +6,7 @@ import com.qg.anywork.model.po.Message;
 import java.io.IOException;
 
 /**
- * 消息实体 Service 层
- *
- * @author FunriLy
- * @date 2017/9/25
- * From small beginnings comes great things.
+ * @author ming
  */
 public interface MessageService {
 

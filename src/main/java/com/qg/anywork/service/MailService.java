@@ -3,11 +3,8 @@ package com.qg.anywork.service;
 import com.qg.anywork.model.dto.RequestResult;
 import com.qg.anywork.model.po.User;
 
-
 /**
- * @author FunriLy
- * @date 2017/8/20
- * From small beginnings comes great things.
+ * @author ming
  */
 public interface MailService {
 

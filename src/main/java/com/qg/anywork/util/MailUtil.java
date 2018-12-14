@@ -14,11 +14,7 @@ import javax.mail.internet.MimeUtility;
 
 
 /**
- * 邮箱工具类
- *
- * @author FunriLy
- * @date 2017/8/20
- * From small beginnings comes great things.
+ * @author ming
  */
 @Component
 public class MailUtil {

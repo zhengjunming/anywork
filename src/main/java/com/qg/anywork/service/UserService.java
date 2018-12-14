@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 /**
- * @author FunriLy
- * @date 2017/7/10
- * From small beginnings comes great things.
+ * @author ming
  */
 @Service
 public interface UserService {
